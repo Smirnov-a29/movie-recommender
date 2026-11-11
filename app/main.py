@@ -63,3 +63,30 @@ def create_movie(movie: Movie):
     new_movie = movie.model_dump()
     movies.append(new_movie)
     return movie
+
+@app.delete("/movies/{movie_id}", response_model=Movie, status_code=200)
+def delete_movie(movie_id: int):
+    for movie in movies:
+        if movie["id"] == movie_id:
+            movies.remove(movie)
+            return movie
+
+    raise HTTPException(
+        status_code=404,
+        detail="Movie not found"
+    )
+
+@app.put("/movies/{movie_id}", response_model=Movie)
+def update_movie(movie_id: int, movie: Movie):
+    for film in movies:
+        if film["id"] == movie_id:
+            film.update(movie.model_dump())
+            return film
+
+    raise HTTPException(
+        status_code=404,
+        detail="Movie not found"
+    )
+
+
+
